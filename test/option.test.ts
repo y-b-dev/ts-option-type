@@ -7,8 +7,8 @@ describe('Option', () => {
 
         it('match: should return "Some" value', () => {
             const result = option.match(
-                () => "No value found",
-                (value) => `Value is: ${value}`
+                (value) => `Value is: ${value}`,
+                () => "No value found"
             )
             expect(result).toBe("Value is: 5")
         })
@@ -25,7 +25,7 @@ describe('Option', () => {
 
         it('map: should correctly transform value', () => {
             const result = option.map(value => value * 2)
-            expect(result.match(() => 0, v => v)).toBe(10)
+            expect(result.match(v => v, () => 0)).toBe(10)
         })
 
         it('mapOrDefault: should map the value', () => {
@@ -85,8 +85,8 @@ describe('Option', () => {
 
         it('match: should return "None" value', () => {
             const result = option.match(
-                () => "No value found",
-                () => "This shouldn't run"
+                _ => "This shouldn't run",
+                () => "No value found"
             )
             expect(result).toBe("No value found")
         })

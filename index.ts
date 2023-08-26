@@ -13,7 +13,7 @@ export interface Option<T> {
      * @param some - The callback to apply if this `Option` is `Some`, and will be passed the value.
      * @returns The result of either `none()` or `some(value)`.
      */
-    readonly match: <U>(none: () => U, some: (value: T) => U) => U
+    readonly match: <U>(some: (value: T) => U, none: () => U) => U
 
     /**
      * Returns the value of this `Option` if it is `Some`, otherwise
@@ -124,7 +124,7 @@ export const None = _none<any>()
 
 export function Some<T>(value: T): Option<T> {
     return {
-        match(_, some) {
+        match(some, _) {
             return some(value)
         },
         getValueOrDefault(_) {
@@ -166,7 +166,7 @@ export function Some<T>(value: T): Option<T> {
 
 function _none<T>(): Option<T> {
     return {
-        match(none, _) {
+        match(_, none) {
             return none()
         },
         getValueOrDefault(defaultValue) {
