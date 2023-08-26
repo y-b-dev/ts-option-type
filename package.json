@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "Rust inspired Option type - a union type wrapper of value T - Some<T> or None",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
+  "types": "dist/index.d.ts",  
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "option, typescript, javascript, ts, js, rust"
