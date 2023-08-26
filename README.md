@@ -1,5 +1,6 @@
 # `Option` Type for TypeScript
 
+Bringing Rust to TypeScript.
 `Option` is a TypeScript utility that represents an optional value, which can either be `Some` with a value or `None`.
 
 ## Installation
