@@ -78,7 +78,7 @@ const result = emptyValue.getValueOrCompute(() => "Computed Value");
 console.log(result);  // Outputs: "Computed Value"
 ```
 
-### 5. Combining Multiple Options
+### 5. Combining Multiple Options (set operations)
 
 ```typescript
 const first: Option<number> = Some(1);
@@ -86,7 +86,11 @@ const second: Option<number> = Some(2);
 
 const combined = first.and(second);
 
-console.log(combined.isSome);  // Outputs: true
+console.log(combined === second);  // Outputs: true
+
+console.log(None.and(first) === None);  // Outputs: true
+
+console.log(None.or(first) === first);  // Outputs: true
 ```
 
 ## License

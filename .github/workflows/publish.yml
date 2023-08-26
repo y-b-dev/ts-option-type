@@ -3,10 +3,7 @@ on:
   workflow_run:
     workflows: ["CI"]
     types:
-      - completed
-  push:
-    branches:
-      - "main"
+      - completed  
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
