@@ -1,4 +1,4 @@
-# `Option` Type for TypeScript
+# `Option` Type for Typescript
 
 `Option` is a TypeScript utility that represents an optional value, which can either be `Some` wrapping a value or `None`.
 
