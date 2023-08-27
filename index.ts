@@ -2,7 +2,7 @@
  * Represents an optional value that can either be `Some` with a value or `None`.
  * @typeparam T The type of the wrapped value.
  */
-export interface Option<T> {
+export type Option<T> = {
     /**
      * Applies the provided callbacks to the value of this `Option`
      * depending on its contents and returns the result of the called
@@ -120,7 +120,43 @@ export interface Option<T> {
     readonly isSome: boolean
 }
 
-export const None = _none<any>()
+export const None: Option<any> = {
+    match(_, none) {
+        return none()
+    },
+    getValueOrDefault(defaultValue) {
+        return defaultValue
+    },
+    getValueOrCompute(computeFn) {
+        return computeFn()
+    },
+    mapOrDefault(_, defaultValue) {
+        return defaultValue
+    },
+    mapOrCompute(_, defaultComputeFn) {
+        return defaultComputeFn()
+    },
+    map(_) {
+        return None
+    },
+    and(_) {
+        return None
+    },
+    andThen(_) {
+        return None
+    },
+    or(option) {
+        return option
+    },
+    orElse(fn) {
+        return fn()
+    },
+    filter(_) {
+        return None
+    },
+    isNone: true,
+    isSome: false
+}
 
 export function Some<T>(value: T): Option<T> {
     return {
@@ -164,42 +200,59 @@ export function Some<T>(value: T): Option<T> {
     }
 }
 
-function _none<T>(): Option<T> {
-    return {
-        match(_, none) {
-            return none()
-        },
-        getValueOrDefault(defaultValue) {
-            return defaultValue
-        },
-        getValueOrCompute(computeFn) {
-            return computeFn()
-        },
-        mapOrDefault(_, defaultValue) {
-            return defaultValue
-        },
-        mapOrCompute(_, defaultComputeFn) {
-            return defaultComputeFn()
-        },
-        map(_) {
-            return None
-        },
-        and(_) {
-            return None
-        },
-        andThen(_) {
-            return None
-        },
-        or(option) {
-            return option
-        },
-        orElse(fn) {
-            return fn()
-        },
-        filter(_) {
-            return None
-        },
-        isNone: true,
-        isSome: false
-    }
+/**
+ * Creates an `Option` from a given value. Returns `None` if the value is `null` or `undefined`; 
+ * otherwise returns `Some` wrapping the value.
+ * 
+ * @param value - The value to be wrapped in an `Option`.
+ * @returns An `Option` wrapping the value or `None`.
+ */
+export function fromValue<T>(value: T): Option<T> {
+    return value === null || value === undefined ? None : Some(value) as Option<T>;
+}
+
+/**
+ * Creates an `Option` from a given value based on a condition provided by the `isNone` predicate.
+ * Returns `None` if the value satisfies the `isNone` condition; otherwise returns `Some` wrapping the value.
+ * 
+ * @param value - The value to be wrapped in an `Option`.
+ * @param isNone - Predicate function to decide if the value should be treated as `None`.
+ * @returns An `Option` wrapping the value or `None` based on the `isNone` predicate.
+ */
+export function fromValueConditional<T>(value: T, isNone: (value: T) => boolean): Option<T> {
+    return isNone(value) ? None : Some(value) as Option<T>;
+}
+
+/**
+ * Creates an `Option` from a given value. Returns `None` if the value is `null`; 
+ * otherwise returns `Some` wrapping the value.
+ * Use when you are sure that value won't be `undefined` or in the rare case where `undefined` should be treated as `Some`.
+ * 
+ * @param value - The nullable value to be wrapped in an `Option`.
+ * @returns An `Option` wrapping the value or `None` if the value is `null`.
+ */
+export function fromNullable<T>(value: T): Option<T> {
+    return value === null ? None : Some(value) as Option<T>;
+}
+
+/**
+ * Creates an `Option` from a given value. Returns `None` if the value is `undefined`; 
+ * otherwise returns `Some` wrapping the value.
+ * Use when you are sure that value won't be `null` or in the rare case where `null` should be treated as `Some`.
+ * 
+ * @param value - The undefinable value to be wrapped in an `Option`.
+ * @returns An `Option` wrapping the value or `None` if the value is `undefined`.
+ */
+export function fromUndefinable<T>(value: T): Option<T> {
+    return value === undefined ? None : Some(value) as Option<T>;
+}
+
+/**
+ * Creates a factory function for generating `Option` instances based on the provided `isNonePredicate`.
+ * 
+ * @param isNonePredicate - Predicate function to decide if a value should be treated as `None`.
+ * @returns A function that accepts a value and returns an `Option` based on the `isNonePredicate`.
+ */
+export function createOptionFactory<T>(isNonePredicate: (value: T) => boolean): (value: T) => Option<T> {
+    return value => isNonePredicate(value) ? None : Some(value);
 }
