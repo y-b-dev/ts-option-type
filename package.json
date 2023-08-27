@@ -1,6 +1,6 @@
 {
   "name": "ts-option-type",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Rust inspired Option type - a union type wrapper of value T - Some<T> or None",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
