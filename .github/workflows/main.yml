@@ -2,6 +2,8 @@ name: CI
 on: [push]
 jobs: 
   build:
+    # IMPORTANT: prevent this action from running on forks
+    if: github.repository == 'y-b-dev/ts-option-type' 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
