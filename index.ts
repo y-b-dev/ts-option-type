@@ -11,7 +11,7 @@ export interface Option<T> {
      * @typeparam U The type of the value returned by the callbacks.
      * @param none - The callback to apply if this `Option` is `None`.
      * @param some - The callback to apply if this `Option` is `Some`, and will be passed the value.
-     * @returns The result of either `none()` or `some(value)`.
+     * @returns The result of either `some(value)` or `none()`.
      */
     readonly match: <U>(some: (value: T) => U, none: () => U) => U
 
@@ -58,10 +58,10 @@ export interface Option<T> {
      * If the option is `None`, returns `None`.
      *
      * @typeparam U The type of the mapped value.
-     * @param computeFn - The function to apply to the value of this `Option` if it is `Some`.
+     * @param fn - The function to apply to the value of this `Option` if it is `Some`.
      * @returns a new `Option` with the result of applying `computeFn` if it is `Some`, otherwise `None`.
      */
-    readonly map: <U>(computeFn: (value: T) => U) => this | Option<U>
+    readonly map: <U>(fn: (value: T) => U) => Option<U>
 
     /**
      * Returns the provided `Option` if this `Option` is `Some`, otherwise returns `None`.
@@ -70,16 +70,16 @@ export interface Option<T> {
      * @param option - The `Option` to return if this `Option` is `Some`.
      * @returns the provided `Option` if this `Option` is `Some`, otherwise returns `None`.
      */
-    readonly and: <U>(option: Option<U>) => this | Option<U>
+    readonly and: <U>(option: Option<U>) => Option<U>
 
     /**
      * Returns the result of calling the provided function if this `Option` is `Some`, otherwise returns `None`.
      *
-     * @typeparam U The type of the value of the other `Option`.
-     * @param computeFn - The function to call if this `Option` is `Some`.
+     * @typeparam U The type of the value of the returned `Option`.
+     * @param fn - The function to call if this `Option` is `Some`.
      * @returns the result of calling the provided function if this `Option` is `Some`, otherwise returns `None`.
      */
-    readonly andThen: <U>(computeFn: () => U) => this | Option<U>
+    readonly andThen: <U>(fn: (value: T) => Option<U>) => Option<U>
 
     /**
      * Returns `this` if it is `Some`, otherwise returns the provided `Option`.
@@ -88,24 +88,24 @@ export interface Option<T> {
      * @param option - The `Option` to return if this `Option` is `None`.
      * @returns `this` if it is `Some`, otherwise the provided `Option`.
      */
-    readonly or: <U>(option: Option<U>) => this | Option<U>
+    readonly or: (option: Option<T>) => Option<T>
 
     /**
      * Returns `this` if it is `Some`, otherwise returns the result of calling the provided function.
      *
      * @typeparam U The type of the value of the other `Option`.
-     * @param computeFn - The function to call if this `Option` is `None`.
+     * @param fn - The function to call if this `Option` is `None`.
      * @returns `this` if it is `Some`, otherwise the result of calling the provided function.
      */
-    readonly orElse: <U>(computeFn: () => U) => this | Option<U>
+    readonly orElse: (fn: () => Option<T>) => Option<T>
 
     /**
      * Returns `this` if the value satisfies the provided predicate, otherwise returns `None`.
      *
-     * @param filterFn - The predicate function to apply to the value of this `Option`.
+     * @param fn - The predicate function to apply to the value of this `Option`.
      * @returns `this` if the value satisfies the predicate, otherwise `None`.
      */
-    readonly filter: (filterFn: (value: T) => boolean) => Option<T>
+    readonly filter: (fn: (value: T) => boolean) => Option<T>
 
     /**
      * Returns `true` if this `Option` is `None`, otherwise `false`.
@@ -145,8 +145,8 @@ export function Some<T>(value: T): Option<T> {
         and(option) {
             return option
         },
-        andThen(computeFn) {
-            return Some(computeFn())
+        andThen<U>(fn: (value: T) => Option<U>) {
+            return fn(value)
         },
         or(_) {
             return this
@@ -154,8 +154,8 @@ export function Some<T>(value: T): Option<T> {
         orElse(_) {
             return this
         },
-        filter(filterFn) {
-            return filterFn(value)
+        filter(fn) {
+            return fn(value)
                 ? this
                 : None
         },
@@ -172,32 +172,32 @@ function _none<T>(): Option<T> {
         getValueOrDefault(defaultValue) {
             return defaultValue
         },
-        getValueOrCompute(fn) {
-            return fn()
+        getValueOrCompute(computeFn) {
+            return computeFn()
         },
         mapOrDefault(_, defaultValue) {
             return defaultValue
         },
-        mapOrCompute(_, defaultCompute) {
-            return defaultCompute()
+        mapOrCompute(_, defaultComputeFn) {
+            return defaultComputeFn()
         },
         map(_) {
-            return this
+            return None
         },
         and(_) {
-            return this
+            return None
         },
         andThen(_) {
-            return this
+            return None
         },
         or(option) {
             return option
         },
         orElse(fn) {
-            return Some(fn())
+            return fn()
         },
         filter(_) {
-            return this
+            return None
         },
         isNone: true,
         isSome: false

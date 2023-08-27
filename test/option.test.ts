@@ -3,71 +3,74 @@ import { Some, None } from "../index"
 describe('Option', () => {
 
     describe('Some', () => {
-        const option = Some(5)
+        const wrappedValue = 0
+        const otherValue = 1
+        const option = Some(wrappedValue)
 
         it('match: should return "Some" value', () => {
             const result = option.match(
-                (value) => `Value is: ${value}`,
-                () => "No value found"
+                value => value,
+                () => otherValue
             )
-            expect(result).toBe("Value is: 5")
+            expect(result).toBe(wrappedValue)
         })
 
         it('getValueOrDefault: should return contained value', () => {
-            const result = option.getValueOrDefault(10)
-            expect(result).toBe(5)
+            const result = option.getValueOrDefault(otherValue)
+            expect(result).toBe(wrappedValue)
         })
 
         it('getValueOrCompute: should return contained value', () => {
-            const result = option.getValueOrCompute(() => 10)
-            expect(result).toBe(5)
+            const result = option.getValueOrCompute(() => otherValue)
+            expect(result).toBe(wrappedValue)
         })
 
         it('map: should correctly transform value', () => {
-            const result = option.map(value => value * 2)
-            expect(result.match(v => v, () => 0)).toBe(10)
+            const result = option.map(value => value.toString())
+            expect(result.match(v => v, () => otherValue.toString())).toBe(wrappedValue.toString())
         })
 
         it('mapOrDefault: should map the value', () => {
-            const result = option.mapOrDefault(v => v * 2, 0)
-            expect(result).toBe(10)
+            const result = option.mapOrDefault(v => v.toString(), otherValue.toString())
+            expect(result).toBe(wrappedValue.toString())
         })
 
         it('mapOrCompute: should map the value', () => {
-            const result = option.mapOrCompute(v => v * 2, () => 0)
-            expect(result).toBe(10)
+            const result = option.mapOrCompute(v => v.toString(), () => otherValue.toString())
+            expect(result).toBe(wrappedValue.toString())
         })
 
         it('and: should return provided option', () => {
-            const other = Some(10)
+            const other = Some(0)
             const combined = option.and(other)
             expect(combined === other)
         })
 
         it('andThen: should return result of provided function', () => {
-            const other = Some(10)
+            const other = Some(0)
             const result = option.andThen(() => other)
             expect(result === other)
         })
 
         it('or: should return itself', () => {
-            const other = Some(10)
+            const other = Some(0)
             const result = option.or(other)
             expect(result === option)
         })
 
         it('orElse: should return itself', () => {
-            const result = option.orElse(() => Some(10))
+            const other = Some(0)
+            const result = option.orElse(() => other)
             expect(result === option)
         })
 
         it('filter: should return None when condition is not met', () => {
-            const filtered = option.filter(value => value < 3)
+            const filtered = option.filter(value => value === otherValue)
             expect(filtered === None)
         })
 
         it('filter: should return itself when condition is met', () => {
-            const filtered = option.filter(value => value > 3)
+            const filtered = option.filter(value => value === wrappedValue)
             expect(filtered === option)
         })
 
@@ -84,41 +87,46 @@ describe('Option', () => {
         const option = None
 
         it('match: should return "None" value', () => {
+            const expected = "No value found"
             const result = option.match(
                 _ => "This shouldn't run",
-                () => "No value found"
+                () => expected
             )
-            expect(result).toBe("No value found")
+            expect(result).toBe(expected)
         })
 
         it('getValueOrDefault: should return default value', () => {
-            const result = option.getValueOrDefault("Default")
-            expect(result).toBe("Default")
+            const expected = "Default"
+            const result = option.getValueOrDefault(expected)
+            expect(result).toBe(expected)
         })
 
         it('getValueOrCompute: should return computed value', () => {
-            const result = option.getValueOrCompute(() => "Computed")
-            expect(result).toBe("Computed")
+            const expected = "Computed"
+            const result = option.getValueOrCompute(() => expected)
+            expect(result).toBe(expected)
         })
 
         it('mapOrDefault: should return default value', () => {
-            const result = option.mapOrDefault(v => v, "Default")
-            expect(result).toBe("Default")
+            const expected = "Default"
+            const result = option.mapOrDefault(v => v, expected)
+            expect(result).toBe(expected)
         })
 
         it('mapOrCompute: should return computed value', () => {
-            const result = option.mapOrCompute(v => v, () => "Computed")
-            expect(result).toBe("Computed")
+            const expected = "Computed"
+            const result = option.mapOrCompute(v => v, () => expected)
+            expect(result).toBe(expected)
         })
 
         it('or: should return provided option', () => {
-            const other = Some(10)
+            const other = Some(0)
             const result = option.or(other)
             expect(result === other)
         })
 
-        it('orElse: should return result of provided function', () => {
-            const other = Some(10)
+        it('orElse: should return the result of the provided function', () => {
+            const other = Some(0)
             const result = option.orElse(() => other)
             expect(result === other)
         })

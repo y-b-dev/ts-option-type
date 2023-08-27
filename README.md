@@ -1,7 +1,6 @@
 # `Option` Type for TypeScript
 
-Bringing Rust to TypeScript.
-`Option` is a TypeScript utility that represents an optional value, which can either be `Some` with a value or `None`.
+`Option` is a TypeScript utility that represents an optional value, which can either be `Some` wrapping a value or `None`.
 
 ## Installation
 
@@ -41,8 +40,8 @@ import { Some, None } from 'ts-option-type';
 const maybeValue: Option<number> = Some(5);
 
 const result = maybeValue.match(
-    () => "No value found",
-    (value) => `Value is: ${value}`
+    (value) => `Value is: ${value}`,
+    () => "No value found"
 );
 
 console.log(result);  // Outputs: "Value is: 5"
