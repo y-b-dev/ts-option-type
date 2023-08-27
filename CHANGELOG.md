@@ -1,5 +1,11 @@
 # ts-option-type
 
+## 3.0.3
+
+### Patch Changes
+
+- e4dcf25: Test
+
 ## 3.0.2
 
 ### Patch Changes
