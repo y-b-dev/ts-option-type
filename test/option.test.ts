@@ -132,7 +132,7 @@ describe('Option', () => {
         })
 
         it('filter: should always return None', () => {
-            const filtered = option.filter(value => value < 3)
+            const filtered = option.filter(_ => true)
             expect(filtered === None)
         })
 
