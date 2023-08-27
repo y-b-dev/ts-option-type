@@ -1,5 +1,11 @@
 # ts-option-type
 
+## 3.0.1
+
+### Patch Changes
+
+- 2f0bd56: Test fix in github action
+
 ## 3.0.0
 
 ### Major Changes
