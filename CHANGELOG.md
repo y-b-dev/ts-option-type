@@ -1,5 +1,11 @@
 # ts-option-type
 
+## 3.1.0
+
+### Minor Changes
+
+- cc0ad84: Added handy Option<T> creation utils - fromValue, fromValueConditional, fromNullable, fromUndefinable, createOptionFactory
+
 ## 3.0.5
 
 ### Patch Changes
