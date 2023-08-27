@@ -1,5 +1,11 @@
 # ts-option-type
 
+## 3.0.0
+
+### Major Changes
+
+- 5a76264: Fixes to be more aligned with rust for `andThen` and `orElse` methods
+
 ## 2.0.0
 
 ### Major Changes
