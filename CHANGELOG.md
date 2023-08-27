@@ -1,5 +1,11 @@
 # ts-option-type
 
+## 3.0.2
+
+### Patch Changes
+
+- 6114c78: Another try to fix changeset publish
+
 ## 3.0.1
 
 ### Patch Changes
