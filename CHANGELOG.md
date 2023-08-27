@@ -1,5 +1,11 @@
 # ts-option-type
 
+## 3.0.5
+
+### Patch Changes
+
+- 84b426f: Test workflow
+
 ## 3.0.4
 
 ### Patch Changes
