@@ -27,7 +27,7 @@ yarn add ts-option-type
 ## Tests
 
 ```
-npm test
+npm run test
 ```
 
 ## Examples
