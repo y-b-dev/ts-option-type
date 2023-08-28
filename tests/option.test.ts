@@ -28,13 +28,6 @@ describe('Option', () => {
             })
         })
 
-        describe('map', () => {
-            it('should correctly transform the value', () => {
-                const result = option.map(value => value.toString())
-                expect(result.match(v => v, () => otherValue.toString())).toBe(wrappedValue.toString())
-            })
-        })
-
         describe('mapOrDefault', () => {
             it('should map the value', () => {
                 const result = option.mapOrDefault(v => v.toString(), otherValue.toString())
@@ -48,6 +41,13 @@ describe('Option', () => {
                 expect(result).toBe(wrappedValue.toString())
             })
         })
+
+        describe('map', () => {
+            it('should correctly transform the value', () => {
+                const result = option.map(value => value.toString())
+                expect(result.match(v => v, () => otherValue.toString())).toBe(wrappedValue.toString())
+            })
+        })     
 
         describe('and', () => {
             it('should return the provided option', () => {
@@ -146,6 +146,29 @@ describe('Option', () => {
                 const expected = "Computed"
                 const result = option.mapOrCompute(v => v, () => expected)
                 expect(result).toBe(expected)
+            })
+        })
+
+        describe('map', () => {
+            it('should return None', () => {
+                const result = option.map(_ => _)
+                expect(result).toBe(None)
+            })
+        })     
+
+        describe('and', () => {
+            it('should return None', () => {
+                const other = Some(0)
+                const combined = option.and(other)
+                expect(combined).toBe(None)
+            })
+        })
+
+        describe('andThen', () => {
+            it('should return None', () => {
+                const other = Some(0)
+                const result = option.andThen(() => other)
+                expect(result).toBe(None)
             })
         })
 

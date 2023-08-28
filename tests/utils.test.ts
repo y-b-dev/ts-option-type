@@ -11,10 +11,10 @@ describe('Option utility functions', () => {
       expect(fromValue(undefined)).toBe(None)
     })
 
-    it('should return Some for valid values', () => {
-      expect(fromValue(5).isSome).toBe(true)
-      expect(fromValue('hello').isSome).toBe(true)
-    })
+    it.each([{}, [], 0, ''])
+      ('should return Some for valid values', value => {
+        expect(fromValue(value).isSome).toBe(true)
+      })
   })
 
   describe('fromValueConditional', () => {
@@ -50,14 +50,14 @@ describe('Option utility functions', () => {
   })
 
   describe('createOptionFactory', () => {
-    const positiveNumOptionFactory = createOptionFactory<number>(v => v < 0)
+    const naturalNumOptionFactory = createOptionFactory<number>(v => v < 0)
 
     it('should return None if predicate is met', () => {
-      expect(positiveNumOptionFactory(-5)).toBe(None)
+      expect(naturalNumOptionFactory(-5)).toBe(None)
     })
 
     it('should return Some if predicate is not met', () => {
-      expect(positiveNumOptionFactory(5).isSome).toBe(true)
+      expect(naturalNumOptionFactory(5).isSome).toBe(true)
     })
   })
 })
