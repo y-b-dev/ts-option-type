@@ -1,6 +1,14 @@
 # `Option` Type for Typescript
 
 `Option` is a TypeScript utility that represents an optional value, which can either be `Some` wrapping a value or `None`.
+Use it to avoid the billion dollar mistake!
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Examples](#examples)
+- [Testing](#testing)
+- [License](#license)
 
 ## Installation
 
@@ -86,9 +94,7 @@ const second: Option<number> = Some(2)
 const combined = first.and(second)
 
 console.log(combined === second)  // Outputs: true
-
 console.log(None.and(first) === None)  // Outputs: true
-
 console.log(None.or(first) === first)  // Outputs: true
 ```
 
@@ -103,8 +109,8 @@ import { fromValue, fromValueConditional, fromNullable, fromUndefinable, createO
 const maybeValue = fromValue("Hello") // Some<string>
 
 // 2. Convert a value to Option based on a custom condition
-const condition = (value: string) => value.length === 0
-const maybeStr = fromValueConditional("", condition) // None
+const isEmptyStr = (value: string) => value.length === 0
+const maybeStr = fromValueConditional("", isEmptyStr) // None
 
 // 3. Convert a possibly nullable object to Option
 const nullObj: {} | null | undefined = null
@@ -114,10 +120,18 @@ const maybeObj = fromNullable(nullObj) // None - fromNullable(undefined) would h
 const undefinedObj: {} | null | undefined = undefined
 const maybeDef = fromUndefinable(undefinedObj) // None - fromUndefinable(null) would have been Some!
 
-// 5. Create a custom Option factory using a predicate
+// 5. Create a custom Option factory using a predicate - when predicate is true, we get None
 const isNegative = (value: number) => value < 0
-const naturalNumOptionFactory = createOptionFactory(isNegative)
-const maybeNaturalNum = naturalNumOptionFactory(5) // Some<number>
+const positiveNumberOptionFactory = createOptionFactory(isNegative)
+const maybeNum = positiveNumberOptionFactory(5) // Some<number>
+```
+
+## Testing
+
+To run tests:
+
+```
+npm run test
 ```
 
 ## License
