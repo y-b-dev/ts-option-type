@@ -1,5 +1,11 @@
 # ts-option-type
 
+## 3.1.1
+
+### Patch Changes
+
+- eb466ac: readme modified, tests refined
+
 ## 3.1.0
 
 ### Minor Changes
