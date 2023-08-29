@@ -1,4 +1,5 @@
 import { None, fromValue, fromValueConditional, fromNullable, fromUndefinable, createOptionFactory } from '../index'
+import fc from "fast-check"
 
 describe('Option utility functions', () => {
 
@@ -19,11 +20,19 @@ describe('Option utility functions', () => {
 
   describe('fromValueConditional', () => {
     it('should return None if condition is met', () => {
-      expect(fromValueConditional(0, _ => true)).toBe(None)
+      fc.assert(
+        fc.property(fc.anything(), value => {
+          expect(fromValueConditional(value, _ => true)).toBe(None)
+        })
+      )
     })
 
     it('should return Some if condition is not met', () => {
-      expect(fromValueConditional(0, _ => false).isSome).toBe(true)
+      fc.assert(
+        fc.property(fc.anything(), value => {
+          expect(fromValueConditional(value, _ => false).isSome).toBe(true)
+        })
+      )
     })
   })
 
@@ -50,14 +59,20 @@ describe('Option utility functions', () => {
   })
 
   describe('createOptionFactory', () => {
-    const naturalNumOptionFactory = createOptionFactory<number>(v => v < 0)
-
-    it('should return None if predicate is met', () => {
-      expect(naturalNumOptionFactory(-5)).toBe(None)
+    it('should return a None returning factory when predicate is met', () => {
+      fc.assert(
+        fc.property(fc.anything(), value => {
+          expect(createOptionFactory(_ => true)(value)).toBe(None)
+        })
+      )
     })
 
-    it('should return Some if predicate is not met', () => {
-      expect(naturalNumOptionFactory(5).isSome).toBe(true)
+    it('should return Some returning factory when predicate is not met', () => {
+      fc.assert(
+        fc.property(fc.anything(), value => {
+          expect(createOptionFactory(_ => false)(value).isSome).toBe(true)
+        })
+      )
     })
   })
 })
